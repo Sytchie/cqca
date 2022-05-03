@@ -5,6 +5,9 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 class Gate(ABC):
+    def __init__(self, coeff):
+        self.coeff = coeff
+
     @abstractmethod
     def __call__(self):
         pass
@@ -27,12 +30,23 @@ class Identity(Gate):
     def __str__(self):
         super().__str__()
         
-        return "I"
+        return str(self.coeff) + "I"
     
     def combine(self, gate):
         super().combine(gate)
         
-        return gate
+        new_coeff = self.coeff * gate.coeff
+
+        if isinstance(gate, Identity):
+            return Identity(new_coeff)
+        if isinstance(gate, PauliX):
+            return PauliX(new_coeff)
+        if isinstance(gate, PauliY):
+            return PauliY(new_coeff)
+        if isinstance(gate, PauliZ):
+            return PauliZ(new_coeff)
+        
+        return None
 
 class PauliX(Gate):
     def __call__(self):
@@ -43,19 +57,21 @@ class PauliX(Gate):
     def __str__(self):
         super().__str__()
         
-        return "X"
+        return str(self.coeff) + "X"
     
     def combine(self, gate):
         super().combine(gate)
+        
+        new_coeff = self.coeff * gate.coeff
 
         if isinstance(gate, Identity):
-            return PauliX()
+            return PauliX(new_coeff)
         if isinstance(gate, PauliX):
-            return Identity()
+            return Identity(new_coeff)
         if isinstance(gate, PauliY):
-            return PauliZ()
+            return PauliZ(new_coeff)
         if isinstance(gate, PauliZ):
-            return PauliY()
+            return PauliY(new_coeff)
         
         return None
         
@@ -69,19 +85,21 @@ class PauliY(Gate):
     def __str__(self):
         super().__str__()
         
-        return "Y"
+        return str(self.coeff) + "Y"
     
     def combine(self, gate):
         super().combine(gate)
         
+        new_coeff = self.coeff * gate.coeff
+        
         if isinstance(gate, Identity):
-            return PauliY()
+            return PauliY(new_coeff)
         if isinstance(gate, PauliX):
-            return PauliZ()
+            return PauliZ(new_coeff)
         if isinstance(gate, PauliY):
-            return Identity()
+            return Identity(new_coeff)
         if isinstance(gate, PauliZ):
-            return PauliX()
+            return PauliX(new_coeff)
         
         return None
 
@@ -94,18 +112,20 @@ class PauliZ(Gate):
     def __str__(self):
         super().__str__()
         
-        return "Z"
+        return str(self.coeff) + "Z"
     
     def combine(self, gate):
         super().combine(gate)
         
+        new_coeff = self.coeff * gate.coeff
+        
         if isinstance(gate, Identity):
-            return PauliZ()
+            return PauliZ(new_coeff)
         if isinstance(gate, PauliX):
-            return PauliY()
+            return PauliY(new_coeff)
         if isinstance(gate, PauliY):
-            return PauliX()
+            return PauliX(new_coeff)
         if isinstance(gate, PauliZ):
-            return Identity()
+            return Identity(new_coeff)
         
         return None
