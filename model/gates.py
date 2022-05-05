@@ -1,11 +1,10 @@
 #!/usr/local/bin/python3
 
-from typing import Type
 from abc import ABC, abstractmethod
 import numpy as np
 
 class Gate(ABC):
-    def __init__(self, coeff):
+    def __init__(self, coeff=1):
         self.coeff = coeff
 
     @abstractmethod
@@ -30,7 +29,8 @@ class Identity(Gate):
     def __str__(self):
         super().__str__()
         
-        return str(self.coeff) + "I"
+        #return str(self.coeff) + "I"
+        return ""
     
     def combine(self, gate):
         super().combine(gate)
