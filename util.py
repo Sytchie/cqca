@@ -1,12 +1,6 @@
-from model.gates import Identity
+#!/usr/local/bin/python3
 
-def create_gate_list(n, coeff=1, gate=Identity):
-    gates = []
-
-    for i in range(n):
-        gates.append(gate(coeff))
-
-    return gates
+from model.gate import Identity
 
 def print_list(elements):
         res = ""

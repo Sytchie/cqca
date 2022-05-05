@@ -129,3 +129,6 @@ class PauliZ(Gate):
             return Identity(new_coeff)
         
         return None
+
+def create_gates(n, coeff=1, gate_type=Identity):
+    return [gate_type(coeff) for _ in range(n)]
