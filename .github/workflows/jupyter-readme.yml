@@ -1,0 +1,41 @@
+name: Jupyter Readme
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  NOTEBOOK_FILE_NAME: "cqca.ipynb"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+        cache: "pip"
+    - name: Install dependencies
+      run: |
+        pip install -U pip
+        pip install flake8 jupyter nbconvert nbformat
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Build Readme
+      run: |
+        jupyter nbconvert --to markdown --execute $NOTEBOOK_FILE_NAME --output README.md
+    - name: Commit Readme
+      uses: EndBug/add-and-commit@v9
+      with:
+        author_name: Alex Sytchev
+        author_email: sytchevalexander@gmail.com
+        message: Updated README.md
+        add: -f README.md
