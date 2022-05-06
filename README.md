@@ -1,11 +1,19 @@
 # Clifford Quantum Cellular Automata
 A Clifford Quantum Cellular Automaton (CQCA) is a *globally unique* ruleset for mapping Pauli gates to a set of Pauli gates.
-This ruleset is applied, at each time step, to every cell of an infinite lattice, which itself is, at first, an identity gate.
+This ruleset is applied, at each time step, to every cell of an infinite lattice.
+Each cell holds a Pauli gate.
 
 The application of a gate to another follows following rules:
 - $i \times i = I, i \in \{I, X, Y, Z\}$ (Unitary operator)
 - $i \times I = I \times i = i, i \in \{I, X, Y, Z\}$ (Identity is neutral)
 - $i \times j = k, i \neq j \neq k \in \{X, Y, Z\}$
+
+Initially, all cells of the lattice are identity gates.
+However, one can change some of the cells before the first iteration to form a starting configuration.
+By then iterating over time steps, the configuration of the lattice changes.
+The patterns in the change are discussed in this notebook.
+
+In this notebook, the lattice is always 1-dimensional (i.e., a spin chain).
 
 ## Environment Preparation
 Technical necessities for the notebook to work properly.
@@ -84,7 +92,7 @@ for cells in res:
 ### Glider
 Since quantum gates, especially Pauli gates, are unitary, they are able to cancel each other out into identity gates. With the right configuration, the "active" gates (i.e., those, which are not the identity gates) propagate to a certain direction, leaving behind only "inactive" identity gates.
 
-**Example:** Starting with Pauli X and Z gates next to each other, for example, produces a basic glider.
+**Example:** Starting with Pauli X and Z gates next to each other produces a basic glider.
 
 
 ```python
@@ -105,7 +113,7 @@ for cells in res:
 
 
 ## Fractal Behavior
-The following configuration exhibits fractal behavior.
+The following configuration exhibits a fractal behavior.
 
 
 ```python
@@ -136,7 +144,7 @@ for cells in res:
 
 
 ## Entanglement
-When the initial cells are entangled, their "reach", which is increasing over time, entangles further cells.
+When the initial cells are entangled, their "reach", which may be increasing over time, entangles further cells.
 
 **Example:** The glider entangles the cells to the right.
 
@@ -159,7 +167,14 @@ res = lattice.iterate(5)
 for cells in res:
     util.print_list(cells)
 
-print(id(res[-1][-1]), [id(cell) for cell in res[-1][-1].entanglements])
+is_entangled = True
+
+for cell in res[-1][:-1]:
+    if cell not in res[-1][-1].entanglements:
+        is_entangled = False
+        break
+
+print("Is the last cell entangled with all already entangled cells?", is_entangled)
 ```
 
     1X	1Z					
@@ -168,5 +183,10 @@ print(id(res[-1][-1]), [id(cell) for cell in res[-1][-1].entanglements])
     			1X	1Z		
     				1X	1Z	
     					1X	1Z
-    140093177420272 [140093177419456, 140093177419504, 140093177419696, 140093177419888, 140093177420080, 140093348873264]
+    Is the last cell entangled with all already entangled cells? True
 
+
+
+```python
+
+```
