@@ -4,6 +4,7 @@ from copy import deepcopy
 from model.cell import Cell, create_cells, entangle, get_gates
 from model.gate import Identity
 
+
 class Lattice:
     def __init__(self, gates, rules, entanglement=False):
         self.cells = [Cell(gate) for gate in gates]
@@ -48,10 +49,10 @@ class Lattice:
 
         for _ in range(n):
             left_extension, right_extension = self.step()
-            
-            res = [create_cells([1] * left_extension) \
-                   + cells \
-                   + create_cells([1] * right_extension) \
+
+            res = [create_cells([1] * left_extension)
+                   + cells
+                   + create_cells([1] * right_extension)
                    for cells in res]
 
             res.append(deepcopy(self.cells))

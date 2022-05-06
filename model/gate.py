@@ -8,20 +8,17 @@ class Gate(ABC):
     def __init__(self, coeff=1):
         self.coeff = coeff
 
-
     @abstractmethod
     def __call__(self):
         pass
-
 
     @abstractmethod
     def __str__(self):
         pass
 
-
     @abstractmethod
     def combine(self, gate):
-        #print("Combining ", self, " and ", gate)
+        # print("Combining ", self, " and ", gate)
         pass
 
 
@@ -31,13 +28,11 @@ class Identity(Gate):
 
         return np.array([[1, 0], [0, 1]])
 
-
     def __str__(self):
         super().__str__()
 
-        #return str(self.coeff) + "I"
+        # return str(self.coeff) + "I"
         return ""
-
 
     def combine(self, gate):
         super().combine(gate)
@@ -62,12 +57,10 @@ class PauliX(Gate):
 
         return np.array([[1, 0], [0, 1]])
 
-
     def __str__(self):
         super().__str__()
 
         return str(self.coeff) + "X"
-
 
     def combine(self, gate):
         super().combine(gate)
@@ -92,12 +85,10 @@ class PauliY(Gate):
 
         return 1j * np.array([[0, -1], [1, 0]])
 
-
     def __str__(self):
         super().__str__()
 
         return str(self.coeff) + "Y"
-
 
     def combine(self, gate):
         super().combine(gate)
@@ -122,12 +113,10 @@ class PauliZ(Gate):
 
         return np.array([[1, 0], [0, -1]])
 
-
     def __str__(self):
         super().__str__()
 
         return str(self.coeff) + "Z"
-
 
     def combine(self, gate):
         super().combine(gate)
