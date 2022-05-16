@@ -26,7 +26,7 @@ Technical necessities for the notebook to work properly.
 
 
 ```python
-import util
+from util import list_to_str
 from model.lattice import Lattice
 from model.gate import Identity, PauliX, PauliY, PauliZ
 ```
@@ -55,7 +55,7 @@ lattice = Lattice([PauliZ()], ruleset)
 res = lattice.iterate(5)
 
 for cells in res:
-    util.print_list(cells)
+    print(list_to_str(cells))
 ```
 
     					1Z					
@@ -78,7 +78,7 @@ lattice = Lattice([PauliX()], ruleset)
 res = lattice.iterate(5)
 
 for cells in res:
-    util.print_list(cells)
+    print(list_to_str(cells))
 ```
 
     				1X				
@@ -101,7 +101,7 @@ lattice = Lattice([PauliX(), PauliZ()], ruleset)
 res = lattice.iterate(5)
 
 for cells in res:
-    util.print_list(cells)
+    print(list_to_str(cells))
 ```
 
     1X	1Z					
@@ -132,7 +132,7 @@ lattice = Lattice([PauliX(), PauliY(), PauliZ(), PauliY(), PauliX()], ruleset)
 res = lattice.iterate(5)
 
 for cells in res:
-    util.print_list(cells)
+    print(list_to_str(cells))
 ```
 
     					1X	1Y	1Z	1Y	1X					
@@ -160,12 +160,12 @@ ruleset = {
 
 
 ```python
-lattice = Lattice([PauliX(), PauliZ()], ruleset, True)
+lattice = Lattice([PauliZ(), PauliX()], ruleset, True)
 
 res = lattice.iterate(5)
 
 for cells in res:
-    util.print_list(cells)
+    print(list_to_str(cells))
 
 is_entangled = True
 
@@ -177,13 +177,51 @@ for cell in res[-1][:-1]:
 print("Is the last cell entangled with all already entangled cells?", is_entangled)
 ```
 
-    1X	1Z					
-    	1X	1Z				
-    		1X	1Z			
-    			1X	1Z		
-    				1X	1Z	
-    					1X	1Z
-    Is the last cell entangled with all already entangled cells? True
+    					1Z	1X
+    				1Z	1X	
+    			1Z	1X		
+    		1Z	1X			
+    	1Z	1X				
+    1Z	1X					
+    Is the last cell entangled with all already entangled cells? False
+
+
+
+```python
+ruleset = {
+    Identity: ([Identity()], 0),
+    PauliX: ([PauliZ(), PauliX(), PauliZ()], 1),
+    PauliY: ([PauliZ(-1), PauliY(), PauliZ()], 1),
+    PauliZ: ([PauliX(), PauliZ(), PauliX()], 1)
+}
+```
+
+
+```python
+lattice = Lattice([PauliX()], ruleset, True)
+
+res = lattice.iterate(5)
+
+for cells in res:
+    print(list_to_str(cells))
+
+is_entangled = True
+
+for cell in res[-1][:-1]:
+    if cell not in res[-1][-1].entanglements:
+        is_entangled = False
+        break
+
+print("Is the last cell entangled with all already entangled cells?", is_entangled)
+```
+
+    					1X					
+    				1Z	1X	1Z				
+    			1X		1X		1X			
+    		1Z	1X		1X		1X	1Z		
+    	1X				1X				1X	
+    1Z	1X	1Z		1Z	1X	1Z		1Z	1X	1Z
+    Is the last cell entangled with all already entangled cells? False
 
 
 

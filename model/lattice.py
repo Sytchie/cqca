@@ -40,7 +40,8 @@ class Lattice:
 
             for gate_index in range(len(gates)):
                 index = i + left_extension + gate_index - offset
-                self.cells[index].gate = self.cells[index].gate.combine(gates[gate_index])
+                self.cells[index].gate = self.cells[index].gate.combine(
+                    gates[gate_index])
 
         return left_extension, right_extension
 
