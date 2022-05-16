@@ -12,12 +12,14 @@ class Cell:
         return str(self.gate)
 
 
-def create_cells(coeffs, entanglement_target=None):
-    cells = [Cell(Identity(coeff)) for coeff in coeffs]
+def create_cells(coeffs, entanglement_targets=[]):
+    cells = []
+    operation = lambda a, b : entangle_multiple(a, b) if entanglement_targets else None
 
-    if entanglement_target is not None:
-        for cell in cells:
-            entangle(entanglement_target, cell)
+    for coeff in coeffs:
+        new_cell = Cell(Identity(coeff))
+        operation(new_cell, cells + entanglement_targets)
+        cells.append(new_cell)
 
     return cells
 
@@ -31,3 +33,8 @@ def entangle(cell_a, cell_b):
                              if cell not in cell_a.entanglements and cell is not cell_a]
     cell_b.entanglements += [cell for cell in cell_a.entanglements + [cell_a]
                              if cell not in cell_b.entanglements and cell is not cell_b]
+
+
+def entangle_multiple(target_cell, cells):
+    for cell in cells:
+        entangle(target_cell, cell)

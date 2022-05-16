@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 
 from copy import deepcopy
-from model.cell import Cell, create_cells, entangle, get_gates
+from model.cell import Cell, create_cells, entangle, entangle_multiple, get_gates
 from model.gate import Identity
 
 
@@ -11,9 +11,8 @@ class Lattice:
         self.rules = rules
         self.entanglement = entanglement
 
-        if entanglement and self.cells:
-            for cell in self.cells:
-                entangle(self.cells[0], cell)
+        if entanglement:
+            entangle_multiple(self.cells[0], self.cells)
 
     def step(self):
         cur_len = len(self.cells)
@@ -25,15 +24,15 @@ class Lattice:
         _, left_extension = self.rules[type(self.cells[0].gate)]
         right_gates, right_offset = self.rules[type(self.cells[-1].gate)]
         right_extension = len(right_gates) - right_offset - 1
-        entanglement_target = self.cells[0] if self.entanglement else None
+        entanglements = self.cells[0].entanglements + [self.cells[0]] if self.entanglement else []
 
         for cell in self.cells:
             cell.gate = Identity()
 
         self.cells = \
-            create_cells([1] * left_extension, entanglement_target) \
+            create_cells([1] * left_extension, entanglements) \
             + self.cells \
-            + create_cells([1] * right_extension, entanglement_target)
+            + create_cells([1] * right_extension, entanglements)
 
         for i in range(cur_len):
             gates, offset = self.rules[type(cur_gates[i])]
