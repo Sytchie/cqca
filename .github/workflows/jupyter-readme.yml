@@ -1,4 +1,4 @@
-name: Jupyter Readme
+name: Update README.md and clean up code
 
 on:
   push:
