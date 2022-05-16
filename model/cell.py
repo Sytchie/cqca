@@ -14,7 +14,8 @@ class Cell:
 
 def create_cells(coeffs, entanglement_targets=[]):
     cells = []
-    operation = lambda a, b : entangle_multiple(a, b) if entanglement_targets else None
+    def operation(a, b): return entangle_multiple(
+        a, b) if entanglement_targets else None
 
     for coeff in coeffs:
         new_cell = Cell(Identity(coeff))

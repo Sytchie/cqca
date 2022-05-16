@@ -183,7 +183,7 @@ print("Is the last cell entangled with all already entangled cells?", is_entangl
     		1Z	1X			
     	1Z	1X				
     1Z	1X					
-    Is the last cell entangled with all already entangled cells? False
+    Is the last cell entangled with all already entangled cells? True
 
 
 
@@ -221,7 +221,7 @@ print("Is the last cell entangled with all already entangled cells?", is_entangl
     		1Z	1X		1X		1X	1Z		
     	1X				1X				1X	
     1Z	1X	1Z		1Z	1X	1Z		1Z	1X	1Z
-    Is the last cell entangled with all already entangled cells? False
+    Is the last cell entangled with all already entangled cells? True
 
 
 

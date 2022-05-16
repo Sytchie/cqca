@@ -24,7 +24,8 @@ class Lattice:
         _, left_extension = self.rules[type(self.cells[0].gate)]
         right_gates, right_offset = self.rules[type(self.cells[-1].gate)]
         right_extension = len(right_gates) - right_offset - 1
-        entanglements = self.cells[0].entanglements + [self.cells[0]] if self.entanglement else []
+        entanglements = self.cells[0].entanglements + \
+            [self.cells[0]] if self.entanglement else []
 
         for cell in self.cells:
             cell.gate = Identity()
