@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 
-from abc import ABC, abstractmethod
 import numpy as np
+from abc import ABC, abstractmethod
 
 
 class Gate(ABC):

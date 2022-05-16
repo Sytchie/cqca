@@ -1,4 +1,4 @@
 #!/usr/local/bin/python3
 
-def print_list(elements):
-    print("\t".join([str(element) for element in elements]))
+def list_to_str(l):
+    return "\t".join([str(e) for e in l])
