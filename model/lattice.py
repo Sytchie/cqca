@@ -6,9 +6,10 @@ from model.gate import Identity
 
 
 class Lattice:
-    def __init__(self, gates, rules, entanglement=False):
+    def __init__(self, gates, automaton, entanglement=False):
         self.cells = [Cell(gate) for gate in gates]
-        self.rules = rules
+        self.automaton = automaton
+        self.rules = self.automaton.get_ruleset()
         self.entanglement = entanglement
 
         if entanglement:
