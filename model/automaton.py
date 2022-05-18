@@ -8,7 +8,7 @@ from model.gate import Identity, PauliX, PauliY, PauliZ, create_gates
 class Automaton:
     def __init__(self, matrix):
         self.matrix = matrix
-        
+
     def __str__(self):
         return str(self.matrix)
 
@@ -42,32 +42,32 @@ class Automaton:
             index = ztoz[i] - z_min
             z_rule[index] = z_rule[index].combine(
                 PauliZ())
-        
+
         short_rule = None
         long_rule = None
-        
+
         short_origin = None
         long_origin = None
-        
+
         if len(x_rule) <= len(z_rule):
             short_rule = x_rule
             long_rule = z_rule
-            
+
             short_origin = -x_min
             long_origin = -z_min
         else:
             short_rule = z_rule
             long_rule = x_rule
-            
+
             short_origin = -z_min
-            long_origin = -x_min    
-        
+            long_origin = -x_min
+
         y_rule = deepcopy(long_rule)
-        
+
         for i in range(len(short_rule)):
             index = i + long_origin - short_origin
             y_rule[index] = y_rule[index].combine(short_rule[i])
-        
+
         return {
             Identity: ([Identity()], 0),
             PauliX: (x_rule, -x_min),

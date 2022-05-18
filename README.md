@@ -27,22 +27,20 @@ Technical necessities for the notebook to work properly.
 
 ```python
 from util import list_to_str
+from model.automaton import Automaton
 from model.lattice import Lattice
 from model.gate import Identity, PauliX, PauliY, PauliZ
 ```
 
-## Example Ruleset
+## Rulesets
 Rules are specified by mapping gates to a list of gates.
 For each cell, the corresponding rule is applied to the cell itself, as well as its neighborhood.
 
+The rules are encoded as matrices of Laurent polynomials. TODO
+
 
 ```python
-ruleset = {
-    Identity: ([Identity()], 0),
-    PauliX: ([PauliZ()], 0),
-    PauliY: ([PauliZ(-1), PauliY(), PauliZ()], 1),
-    PauliZ: ([PauliZ(), PauliX(), PauliZ()], 1)
-}
+automaton = Automaton([[[], [0]], [[0], [-1, 1]]])
 ```
 
 ### Evolution of a Pauli Z Gate
@@ -50,7 +48,7 @@ A cell containing a Z gate will contain an X gate in the next time step, and als
 
 
 ```python
-lattice = Lattice([PauliZ()], ruleset)
+lattice = Lattice([PauliZ()], automaton)
 
 res = lattice.iterate(5)
 
@@ -73,7 +71,7 @@ From the second timestep forward the lattice behaves as if it had started with a
 
 
 ```python
-lattice = Lattice([PauliX()], ruleset)
+lattice = Lattice([PauliX()], automaton)
 
 res = lattice.iterate(5)
 
@@ -96,7 +94,7 @@ Since quantum gates, especially Pauli gates, are unitary, they are able to cance
 
 
 ```python
-lattice = Lattice([PauliX(), PauliZ()], ruleset)
+lattice = Lattice([PauliX(), PauliZ()], automaton)
 
 res = lattice.iterate(5)
 
@@ -117,17 +115,12 @@ The following configuration exhibits a fractal behavior.
 
 
 ```python
-ruleset = {
-    Identity: ([Identity()], 0),
-    PauliX: ([PauliX(), PauliY(), PauliX()], 1),
-    PauliY: ([PauliZ(-1), PauliY(), PauliZ()], 1),
-    PauliZ: ([PauliX()], 0)
-}
+automaton = Automaton([[[-1, 0, 1], [0]], [[0], []]])
 ```
 
 
 ```python
-lattice = Lattice([PauliX(), PauliY(), PauliZ(), PauliY(), PauliX()], ruleset)
+lattice = Lattice([PauliX(), PauliY(), PauliZ(), PauliY(), PauliX()], automaton)
 
 res = lattice.iterate(5)
 
@@ -136,11 +129,11 @@ for cells in res:
 ```
 
     					1X	1Y	1Z	1Y	1X					
-    				1X	-1X	1Z	-1X	1Z	1X	1X				
-    			1X	1Z	1Z	1X	1Y	1X	1Z	1Z	1X			
-    		1X	1Y			-1X	1Y	1X			1Y	1X		
-    	1X	-1X	1Z	1Z	1X	-1X	1Y	1X	1X	-1Z	1Z	1X	1X	
-    1X	1Z	1Z			1Z		1Y		1Z			1Z	1Z	1X
+    				1X	1Z	1Y	1X	1Y	1Z	1X				
+    			1X	1Y	1X	1Y	1Y	1Y	1X	1Y	1X			
+    		1X	1Z	1Z	1Y	1Z	1Z	1Z	1Y	1Z	1Z	1X		
+    	1X	1Y			1Z		1X		1Z			1Y	1X	
+    1X	1Z	1Y	1X		1X	1X	1Y	1X	1X		1X	1Y	1Z	1X
 
 
 ## Entanglement
@@ -150,17 +143,12 @@ When the initial cells are entangled, their "reach", which may be increasing ove
 
 
 ```python
-ruleset = {
-    Identity: ([Identity()], 0),
-    PauliX: ([PauliZ()], 0),
-    PauliY: ([PauliZ(-1), PauliY(), PauliZ()], 1),
-    PauliZ: ([PauliZ(), PauliX(), PauliZ()], 1)
-}
+automaton = Automaton([[[], [0]], [[0], [-1, 1]]])
 ```
 
 
 ```python
-lattice = Lattice([PauliZ(), PauliX()], ruleset, True)
+lattice = Lattice([PauliZ(), PauliX()], automaton, True)
 
 res = lattice.iterate(5)
 
@@ -183,44 +171,6 @@ print("Is the last cell entangled with all already entangled cells?", is_entangl
     		1Z	1X			
     	1Z	1X				
     1Z	1X					
-    Is the last cell entangled with all already entangled cells? True
-
-
-
-```python
-ruleset = {
-    Identity: ([Identity()], 0),
-    PauliX: ([PauliZ(), PauliX(), PauliZ()], 1),
-    PauliY: ([PauliZ(-1), PauliY(), PauliZ()], 1),
-    PauliZ: ([PauliX(), PauliZ(), PauliX()], 1)
-}
-```
-
-
-```python
-lattice = Lattice([PauliX()], ruleset, True)
-
-res = lattice.iterate(5)
-
-for cells in res:
-    print(list_to_str(cells))
-
-is_entangled = True
-
-for cell in res[-1][:-1]:
-    if cell not in res[-1][-1].entanglements:
-        is_entangled = False
-        break
-
-print("Is the last cell entangled with all already entangled cells?", is_entangled)
-```
-
-    					1X					
-    				1Z	1X	1Z				
-    			1X		1X		1X			
-    		1Z	1X		1X		1X	1Z		
-    	1X				1X				1X	
-    1Z	1X	1Z		1Z	1X	1Z		1Z	1X	1Z
     Is the last cell entangled with all already entangled cells? True
 
 
