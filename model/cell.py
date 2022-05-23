@@ -10,7 +10,7 @@ class Cell:
 
     def __str__(self):
         return str(self.gate)
-    
+
     def entangle(self, target):
         if target is self:
             return
@@ -19,10 +19,10 @@ class Cell:
 
         self.entanglements += [target]
         target.entangle(self)
-        
+
         for cell in target.entanglements:
             self.entangle(cell)
-    
+
     def disentangle(self):
         for cell in self.entanglements:
             cell.entanglements.remove(self)

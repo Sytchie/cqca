@@ -44,7 +44,7 @@ class Lattice:
                 target_index = cur_index + gate_index - offset
                 self.cells[target_index].gate = self.cells[target_index].gate.combine(
                     gates[gate_index])
-                
+
                 if self.entanglement:
                     cur_cell.entangle(self.cells[target_index])
 

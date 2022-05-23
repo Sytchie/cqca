@@ -137,7 +137,7 @@ for cells in res:
 
 
 ## Entanglement
-When the initial cells are entangled, their "reach", which may be increasing over time, entangles further cells.
+When the initial cells are entangled, their "reach", which may be increasing over time, entangles further cells. TODO
 
 **Example:** The glider entangles the cells to the right.
 
@@ -148,30 +148,65 @@ automaton = Automaton([[[], [0]], [[0], [-1, 1]]])
 
 
 ```python
-lattice = Lattice([PauliZ(), PauliX()], automaton, True)
+lattice = Lattice([PauliX(), PauliZ()], automaton, True)
 
 res = lattice.iterate(5)
 
 for cells in res:
-    print(list_to_str(cells))
-
-is_entangled = True
-
-for cell in res[-1][:-1]:
-    if cell not in res[-1][-1].entanglements:
-        is_entangled = False
-        break
-
-print("Is the last cell entangled with all already entangled cells?", is_entangled)
+    print("cells:", list_to_str(cells))
+    
+    for cell in cells:
+        print(cell, ":", list_to_str(cell.entanglements))
 ```
 
-    					1Z	1X
-    				1Z	1X	
-    			1Z	1X		
-    		1Z	1X			
-    	1Z	1X				
-    1Z	1X					
-    Is the last cell entangled with all already entangled cells? True
+    cells: 1X	1Z					
+    1X : 1Z
+    1Z : 1X
+     : 
+     : 
+     : 
+     : 
+     : 
+    cells: 	1X	1Z				
+     : 
+    1X : 1Z
+    1Z : 1X
+     : 
+     : 
+     : 
+     : 
+    cells: 		1X	1Z			
+     : 
+     : 
+    1X : 1Z
+    1Z : 1X
+     : 
+     : 
+     : 
+    cells: 			1X	1Z		
+     : 
+     : 
+     : 
+    1X : 1Z
+    1Z : 1X
+     : 
+     : 
+    cells: 				1X	1Z	
+     : 
+     : 
+     : 
+     : 
+    1X : 1Z
+    1Z : 1X
+     : 
+    cells: 					1X	1Z
+     : 
+     : 
+     : 
+     : 
+     : 
+    1X : 1Z
+    1Z : 1X
 
 
 
