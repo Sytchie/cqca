@@ -18,7 +18,6 @@ class Gate(ABC):
 
     @abstractmethod
     def combine(self, gate):
-        # print("Combining ", self, " and ", gate)
         pass
 
 

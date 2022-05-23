@@ -10,6 +10,24 @@ class Cell:
 
     def __str__(self):
         return str(self.gate)
+    
+    def entangle(self, target):
+        if target is self:
+            return
+        if target in self.entanglements:
+            return
+
+        self.entanglements += [target]
+        target.entangle(self)
+        
+        for cell in target.entanglements:
+            self.entangle(cell)
+    
+    def disentangle(self):
+        for cell in self.entanglements:
+            cell.entanglements.remove(self)
+
+        self.entanglements = []
 
 
 def create_cells(coeffs, entanglement_targets=[]):
@@ -29,13 +47,6 @@ def get_gates(cells):
     return [cell.gate for cell in cells]
 
 
-def entangle(cell_a, cell_b):
-    cell_a.entanglements += [cell for cell in cell_b.entanglements + [cell_b]
-                             if cell not in cell_a.entanglements and cell is not cell_a]
-    cell_b.entanglements += [cell for cell in cell_a.entanglements + [cell_a]
-                             if cell not in cell_b.entanglements and cell is not cell_b]
-
-
 def entangle_multiple(target_cell, cells):
     for cell in cells:
-        entangle(target_cell, cell)
+        target_cell.entangle(cell)

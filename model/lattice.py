@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 
 from copy import deepcopy
-from model.cell import Cell, create_cells, entangle, entangle_multiple, get_gates
+from model.cell import Cell, create_cells, get_gates
 from model.gate import Identity
 
 
@@ -12,8 +12,9 @@ class Lattice:
         self.rules = self.automaton.get_ruleset()
         self.entanglement = entanglement
 
-        if entanglement:
-            entangle_multiple(self.cells[0], self.cells)
+        if self.cells and self.entanglement:
+            for cell in self.cells:
+                self.cells[0].entangle(cell)
 
     def step(self):
         cur_len = len(self.cells)
@@ -25,24 +26,31 @@ class Lattice:
         _, left_extension = self.rules[type(self.cells[0].gate)]
         right_gates, right_offset = self.rules[type(self.cells[-1].gate)]
         right_extension = len(right_gates) - right_offset - 1
-        entanglements = self.cells[0].entanglements + \
-            [self.cells[0]] if self.entanglement else []
 
         for cell in self.cells:
             cell.gate = Identity()
 
         self.cells = \
-            create_cells([1] * left_extension, entanglements) \
+            create_cells([1] * left_extension) \
             + self.cells \
-            + create_cells([1] * right_extension, entanglements)
+            + create_cells([1] * right_extension)
 
         for i in range(cur_len):
+            cur_index = i + left_extension
+            cur_cell = self.cells[cur_index]
             gates, offset = self.rules[type(cur_gates[i])]
 
             for gate_index in range(len(gates)):
-                index = i + left_extension + gate_index - offset
-                self.cells[index].gate = self.cells[index].gate.combine(
+                target_index = cur_index + gate_index - offset
+                self.cells[target_index].gate = self.cells[target_index].gate.combine(
                     gates[gate_index])
+                
+                if self.entanglement:
+                    cur_cell.entangle(self.cells[target_index])
+
+        for cell in self.cells:
+            if type(cell.gate) == Identity:
+                cell.disentangle()
 
         return left_extension, right_extension
 
