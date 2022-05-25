@@ -22,11 +22,12 @@ Technical necessities for the notebook to work properly.
 ```python
 %load_ext autoreload
 %autoreload 2
+%matplotlib inline
 ```
 
 
 ```python
-from util import list_to_str
+from util import list_to_str, plot_entanglement
 from model.automaton import Automaton
 from model.lattice import Lattice
 from model.gate import Identity, PauliX, PauliY, PauliZ
@@ -40,7 +41,7 @@ The rules are encoded as matrices of Laurent polynomials. TODO
 
 
 ```python
-automaton = Automaton([[[], [0]], [[0], [-1, 1]]])
+glider = Automaton([[[], [0]], [[0], [-1, 1]]])
 ```
 
 ### Evolution of a Pauli Z Gate
@@ -48,7 +49,7 @@ A cell containing a Z gate will contain an X gate in the next time step, and als
 
 
 ```python
-lattice = Lattice([PauliZ()], automaton)
+lattice = Lattice([PauliZ()], glider)
 
 res = lattice.iterate(5)
 
@@ -71,7 +72,7 @@ From the second timestep forward the lattice behaves as if it had started with a
 
 
 ```python
-lattice = Lattice([PauliX()], automaton)
+lattice = Lattice([PauliX()], glider)
 
 res = lattice.iterate(5)
 
@@ -94,7 +95,7 @@ Since quantum gates, especially Pauli gates, are unitary, they are able to cance
 
 
 ```python
-lattice = Lattice([PauliX(), PauliZ()], automaton)
+lattice = Lattice([PauliX(), PauliZ()], glider)
 
 res = lattice.iterate(5)
 
@@ -115,12 +116,12 @@ The following configuration exhibits a fractal behavior.
 
 
 ```python
-automaton = Automaton([[[-1, 0, 1], [0]], [[0], []]])
+fractal = Automaton([[[-1, 0, 1], [0]], [[0], []]])
 ```
 
 
 ```python
-lattice = Lattice([PauliX(), PauliY(), PauliZ(), PauliY(), PauliX()], automaton)
+lattice = Lattice([PauliX(), PauliY(), PauliZ(), PauliY(), PauliX()], fractal)
 
 res = lattice.iterate(5)
 
@@ -139,32 +140,32 @@ for cells, _ in res:
 ## Entanglement
 When the initial cells are entangled, their "reach", which may be increasing over time, entangles further cells. TODO
 
-**Example:** The glider entangles the cells to the right.
-
 
 ```python
-automaton = Automaton([[[], [0]], [[0], [-1, 1]]])
+glider2 = Automaton([[[], [0]], [[0], [-2, 2]]])
 ```
 
 
 ```python
-lattice = Lattice([PauliY(), PauliX(), PauliY()], automaton, True)
+alms = [
+    (glider, "Glider", "v"),
+    (glider2, "Glider (length 2)", "^"),
+    (fractal, "Fractal", "x"),
+    #(periodical, "Periodical", "s")
+]
+init_config = [PauliY(), PauliX(), PauliY()]
+max_t = 20
+```
 
-res = lattice.iterate(5)
 
-for cells, entanglement in res:
-    print("cells:", list_to_str(cells), "entanglement:", entanglement)
+```python
+plot_entanglement(alms, init_config, max_t)
+```
+
+
     
-#    for cell in cells:
-#        print(cell, ":", list_to_str(cell.entanglements))
-```
-
-    cells: 					1Y	1X	1Y					 entanglement: 1
-    cells: 				1Z	1Y	1Z	1Y	1Z				 entanglement: 2
-    cells: 			1Z	1Y	1Y	1X	1Y	1Y	1Z			 entanglement: 3
-    cells: 		1Z	1Y	1Y	1X	1Z	1X	1Y	1Y	1Z		 entanglement: 4
-    cells: 	1Z	1Y	1Y	1X	1Z	1X	1Z	1X	1Y	1Y	1Z	 entanglement: 5
-    cells: 1Z	1Y	1Y	1X	1Z	1X	1Z	1X	1Z	1X	1Y	1Y	1Z entanglement: 6
+![png](README_files/README_18_0.png)
+    
 
 
 
