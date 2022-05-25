@@ -52,7 +52,7 @@ lattice = Lattice([PauliZ()], automaton)
 
 res = lattice.iterate(5)
 
-for cells in res:
+for cells, _ in res:
     print(list_to_str(cells))
 ```
 
@@ -75,7 +75,7 @@ lattice = Lattice([PauliX()], automaton)
 
 res = lattice.iterate(5)
 
-for cells in res:
+for cells, _ in res:
     print(list_to_str(cells))
 ```
 
@@ -98,7 +98,7 @@ lattice = Lattice([PauliX(), PauliZ()], automaton)
 
 res = lattice.iterate(5)
 
-for cells in res:
+for cells, _ in res:
     print(list_to_str(cells))
 ```
 
@@ -124,7 +124,7 @@ lattice = Lattice([PauliX(), PauliY(), PauliZ(), PauliY(), PauliX()], automaton)
 
 res = lattice.iterate(5)
 
-for cells in res:
+for cells, _ in res:
     print(list_to_str(cells))
 ```
 
@@ -148,65 +148,23 @@ automaton = Automaton([[[], [0]], [[0], [-1, 1]]])
 
 
 ```python
-lattice = Lattice([PauliX(), PauliZ()], automaton, True)
+lattice = Lattice([PauliY(), PauliX(), PauliY()], automaton, True)
 
 res = lattice.iterate(5)
 
-for cells in res:
-    print("cells:", list_to_str(cells))
+for cells, entanglement in res:
+    print("cells:", list_to_str(cells), "entanglement:", entanglement)
     
-    for cell in cells:
-        print(cell, ":", list_to_str(cell.entanglements))
+#    for cell in cells:
+#        print(cell, ":", list_to_str(cell.entanglements))
 ```
 
-    cells: 1X	1Z					
-    1X : 1Z
-    1Z : 1X
-     : 
-     : 
-     : 
-     : 
-     : 
-    cells: 	1X	1Z				
-     : 
-    1X : 1Z
-    1Z : 1X
-     : 
-     : 
-     : 
-     : 
-    cells: 		1X	1Z			
-     : 
-     : 
-    1X : 1Z
-    1Z : 1X
-     : 
-     : 
-     : 
-    cells: 			1X	1Z		
-     : 
-     : 
-     : 
-    1X : 1Z
-    1Z : 1X
-     : 
-     : 
-    cells: 				1X	1Z	
-     : 
-     : 
-     : 
-     : 
-    1X : 1Z
-    1Z : 1X
-     : 
-    cells: 					1X	1Z
-     : 
-     : 
-     : 
-     : 
-     : 
-    1X : 1Z
-    1Z : 1X
+    cells: 					1Y	1X	1Y					 entanglement: 1
+    cells: 				1Z	1Y	1Z	1Y	1Z				 entanglement: 2
+    cells: 			1Z	1Y	1Y	1X	1Y	1Y	1Z			 entanglement: 3
+    cells: 		1Z	1Y	1Y	1X	1Z	1X	1Y	1Y	1Z		 entanglement: 4
+    cells: 	1Z	1Y	1Y	1X	1Z	1X	1Z	1X	1Y	1Y	1Z	 entanglement: 5
+    cells: 1Z	1Y	1Y	1X	1Z	1X	1Z	1X	1Z	1X	1Y	1Y	1Z entanglement: 6
 
 
 

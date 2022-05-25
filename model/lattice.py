@@ -15,9 +15,9 @@ class Lattice:
         if self.cells and self.entangle:
             for cell in self.cells:
                 self.cells[0].entangle(cell)
-        
+
         self.entanglement = self._calc_entanglement()
-    
+
     def iterate(self, n=1):
         res = [(deepcopy(self.cells), self.entanglement)]
 
@@ -32,7 +32,7 @@ class Lattice:
             res.append((deepcopy(self.cells), self.entanglement))
 
         return res
-    
+
     def _step(self):
         cur_len = len(self.cells)
 
@@ -68,7 +68,7 @@ class Lattice:
         for cell in self.cells:
             if type(cell.gate) == Identity:
                 cell.disentangle()
-        
+
         self.entanglement = self._calc_entanglement()
 
         return left_extension, right_extension
@@ -78,12 +78,11 @@ class Lattice:
             return 0
 
         max_e = 0
-        
+
         for cell in self.cells:
             cur_e = len(cell.entanglements) // 2
-            
+
             if cur_e > max_e:
                 max_e = cur_e
-    
+
         return max_e
-    
