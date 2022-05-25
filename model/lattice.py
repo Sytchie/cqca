@@ -6,17 +6,34 @@ from model.gate import Identity
 
 
 class Lattice:
-    def __init__(self, gates, automaton, entanglement=False):
+    def __init__(self, gates, automaton, entangle=False):
         self.cells = [Cell(gate) for gate in gates]
         self.automaton = automaton
         self.rules = self.automaton.get_ruleset()
-        self.entanglement = entanglement
+        self.entangle = entangle
 
-        if self.cells and self.entanglement:
+        if self.cells and self.entangle:
             for cell in self.cells:
                 self.cells[0].entangle(cell)
+        
+        self.entanglement = self._calc_entanglement()
+    
+    def iterate(self, n=1):
+        res = [(deepcopy(self.cells), self.entanglement)]
 
-    def step(self):
+        for _ in range(n):
+            left_extension, right_extension = self._step()
+
+            res = [(create_cells([1] * left_extension)
+                   + cells
+                   + create_cells([1] * right_extension), e)
+                   for cells, e in res]
+
+            res.append((deepcopy(self.cells), self.entanglement))
+
+        return res
+    
+    def _step(self):
         cur_len = len(self.cells)
 
         if cur_len == 0:
@@ -45,26 +62,28 @@ class Lattice:
                 self.cells[target_index].gate = self.cells[target_index].gate.combine(
                     gates[gate_index])
 
-                if self.entanglement:
+                if self.entangle:
                     cur_cell.entangle(self.cells[target_index])
 
         for cell in self.cells:
             if type(cell.gate) == Identity:
                 cell.disentangle()
+        
+        self.entanglement = self._calc_entanglement()
 
         return left_extension, right_extension
 
-    def iterate(self, n=1):
-        res = [deepcopy(self.cells)]
+    def _calc_entanglement(self):
+        if not self.entangle:
+            return 0
 
-        for _ in range(n):
-            left_extension, right_extension = self.step()
-
-            res = [create_cells([1] * left_extension)
-                   + cells
-                   + create_cells([1] * right_extension)
-                   for cells in res]
-
-            res.append(deepcopy(self.cells))
-
-        return res
+        max_e = 0
+        
+        for cell in self.cells:
+            cur_e = len(cell.entanglements) // 2
+            
+            if cur_e > max_e:
+                max_e = cur_e
+    
+        return max_e
+    
