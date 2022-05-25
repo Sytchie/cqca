@@ -57,12 +57,12 @@ for cells, _ in res:
     print(list_to_str(cells))
 ```
 
-    					1Z					
-    				1Z	1X	1Z				
-    			1Z	1X	1Z	1X	1Z			
-    		1Z	1X	1Z	1X	1Z	1X	1Z		
-    	1Z	1X	1Z	1X	1Z	1X	1Z	1X	1Z	
-    1Z	1X	1Z	1X	1Z	1X	1Z	1X	1Z	1X	1Z
+    					Z					
+    				Z	X	Z				
+    			Z	X	Z	X	Z			
+    		Z	X	Z	X	Z	X	Z		
+    	Z	X	Z	X	Z	X	Z	X	Z	
+    Z	X	Z	X	Z	X	Z	X	Z	X	Z
 
 
 ### Evolution of a Pauli X Gate.
@@ -80,12 +80,12 @@ for cells, _ in res:
     print(list_to_str(cells))
 ```
 
-    				1X				
-    				1Z				
-    			1Z	1X	1Z			
-    		1Z	1X	1Z	1X	1Z		
-    	1Z	1X	1Z	1X	1Z	1X	1Z	
-    1Z	1X	1Z	1X	1Z	1X	1Z	1X	1Z
+    				X				
+    				Z				
+    			Z	X	Z			
+    		Z	X	Z	X	Z		
+    	Z	X	Z	X	Z	X	Z	
+    Z	X	Z	X	Z	X	Z	X	Z
 
 
 ### Glider
@@ -103,12 +103,12 @@ for cells, _ in res:
     print(list_to_str(cells))
 ```
 
-    1X	1Z					
-    	1X	1Z				
-    		1X	1Z			
-    			1X	1Z		
-    				1X	1Z	
-    					1X	1Z
+    X	Z					
+    	X	Z				
+    		X	Z			
+    			X	Z		
+    				X	Z	
+    					X	Z
 
 
 ## Fractal Behavior
@@ -129,12 +129,12 @@ for cells, _ in res:
     print(list_to_str(cells))
 ```
 
-    					1X	1Y	1Z	1Y	1X					
-    				1X	1Z	1Y	1X	1Y	1Z	1X				
-    			1X	1Y	1X	1Y	1Y	1Y	1X	1Y	1X			
-    		1X	1Z	1Z	1Y	1Z	1Z	1Z	1Y	1Z	1Z	1X		
-    	1X	1Y			1Z		1X		1Z			1Y	1X	
-    1X	1Z	1Y	1X		1X	1X	1Y	1X	1X		1X	1Y	1Z	1X
+    					X	Y	Z	Y	X					
+    				X	Z	Y	X	Y	Z	X				
+    			X	Y	X	Y	Y	Y	X	Y	X			
+    		X	Z	Z	Y	Z	Z	Z	Y	Z	Z	X		
+    	X	Y			Z		X		Z			Y	X	
+    X	Z	Y	X		X	X	Y	X	X		X	Y	Z	X
 
 
 ## Entanglement
