@@ -14,7 +14,8 @@ class Gate(ABC):
 
     @abstractmethod
     def __str__(self):
-        pass
+        # return str(self.coeff)
+        return ""
 
     @abstractmethod
     def combine(self, gate):
@@ -28,9 +29,7 @@ class Identity(Gate):
         return np.array([[1, 0], [0, 1]])
 
     def __str__(self):
-        super().__str__()
-
-        # return str(self.coeff) + "I"
+        # return super().__str__() + "I"
         return ""
 
     def combine(self, gate):
@@ -57,9 +56,7 @@ class PauliX(Gate):
         return np.array([[1, 0], [0, 1]])
 
     def __str__(self):
-        super().__str__()
-
-        return str(self.coeff) + "X"
+        return super().__str__() + "X"
 
     def combine(self, gate):
         super().combine(gate)
@@ -73,7 +70,7 @@ class PauliX(Gate):
         if isinstance(gate, PauliY):
             return PauliZ(new_coeff)
         if isinstance(gate, PauliZ):
-            return PauliY(new_coeff)
+            return PauliY(new_coeff * 1j)
 
         return None
 
@@ -85,9 +82,7 @@ class PauliY(Gate):
         return 1j * np.array([[0, -1], [1, 0]])
 
     def __str__(self):
-        super().__str__()
-
-        return str(self.coeff) + "Y"
+        return super().__str__() + "Y"
 
     def combine(self, gate):
         super().combine(gate)
@@ -95,7 +90,7 @@ class PauliY(Gate):
         new_coeff = self.coeff * gate.coeff
 
         if isinstance(gate, Identity):
-            return PauliY(new_coeff)
+            return PauliY(new_coeff * 1j)
         if isinstance(gate, PauliX):
             return PauliZ(new_coeff)
         if isinstance(gate, PauliY):
@@ -113,9 +108,7 @@ class PauliZ(Gate):
         return np.array([[1, 0], [0, -1]])
 
     def __str__(self):
-        super().__str__()
-
-        return str(self.coeff) + "Z"
+        return super().__str__() + "Z"
 
     def combine(self, gate):
         super().combine(gate)
@@ -125,7 +118,7 @@ class PauliZ(Gate):
         if isinstance(gate, Identity):
             return PauliZ(new_coeff)
         if isinstance(gate, PauliX):
-            return PauliY(new_coeff)
+            return PauliY(new_coeff * 1j)
         if isinstance(gate, PauliY):
             return PauliX(new_coeff)
         if isinstance(gate, PauliZ):
