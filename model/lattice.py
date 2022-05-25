@@ -75,13 +75,5 @@ class Lattice:
     def _calc_entanglement(self):
         if not self.entangle:
             return 0
-
-        max_e = 0
-
-        for cell in self.cells:
-            cur_e = len(cell.entanglements) // 2
-
-            if cur_e > max_e:
-                max_e = cur_e
-
-        return max_e
+        
+        return max([len(cell.entanglements) // 2 for cell in self.cells])
