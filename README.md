@@ -1,6 +1,6 @@
 # Clifford Quantum Cellular Automata
-A Clifford Quantum Cellular Automaton (CQCA) is a *globally unique* ruleset for mapping Pauli gates to a set of Pauli gates.
-This ruleset is applied, at each time step, to every cell of an infinite lattice.
+A Clifford Quantum Cellular Automaton (CQCA) is a *globally unique* ruleset for mapping Pauli gates to a set of Pauli gates (or identity gates).
+This ruleset is applied, at each time step, to every cell of an infinite lattice of cells.
 Each cell holds a Pauli gate.
 
 The application of a gate to another follows following rules:
@@ -37,7 +37,61 @@ from model.gate import Identity, PauliX, PauliY, PauliZ
 Rules are specified by mapping gates to a list of gates.
 For each cell, the corresponding rule is applied to the cell itself, as well as its neighborhood.
 
-The rules are encoded as matrices of Laurent polynomials. TODO
+Mapping from an X gate:
+
+First, a binary vector specifies the cells, which map to X gates. The vector also has a set origin cell:
+
+$
+\xi_{X \rightarrow X} = (\cdots 0 1 0 \underline{1} 0 1 0 \cdots)
+$
+
+The next binary vector shows the mapping to Z gates:
+
+$
+\xi_{X \rightarrow Z} = (\cdots 0 1 1 0 \underline{1} 0 1 1 0\cdots)
+$
+
+Mapping from a Z gate:
+
+The same way there are two binary vectors mapping Z to X and Z to Z gates.
+In total, this yields the following matrix:
+
+$
+\begin{pmatrix}
+\xi_{X \rightarrow X} & \xi_{X \rightarrow X} \\
+\xi_{Z \rightarrow X} & \xi_{Z \rightarrow Z}
+\end{pmatrix}
+$
+
+The mapping from a Y gate results from applying both an X and a Z gate (it also introduces a $1i$ coeffiecient, but it is of no importance here).
+
+Furthermore, the binary vectors can be represented with just the indices relative to the origin, i.e., the cell that the mapping comes from.
+
+The ruleset
+
+$
+X \rightarrow Z \\
+Z \rightarrow Z X Z
+$
+
+and therefore
+
+$
+Y \rightarrow Z Y Z
+$
+
+are thus represented by the following matrix:
+
+$
+\begin{pmatrix}
+() & (0) \\
+(0) & (-1, 1)
+\end{pmatrix}
+$
+
+This matrix specifies the so called glider CQCA, the behavior of which is studied next.
+
+### Glider
 
 
 ```python
@@ -88,10 +142,10 @@ for cells, _ in res:
     Z	X	Z	X	Z	X	Z	X	Z
 
 
-### Glider
-Since quantum gates, especially Pauli gates, are unitary, they are able to cancel each other out into identity gates. With the right configuration, the "active" gates (i.e., those, which are not the identity gates) propagate to a certain direction, leaving behind only "inactive" identity gates.
+Since quantum gates, especially Pauli gates, are unitary, they are able to cancel each other out into identity gates.
+With the right configuration, the "active" gates (i.e., those, which are not the identity gates) propagate to a certain direction, leaving behind only "inactive" identity gates.
 
-**Example:** Starting with Pauli X and Z gates next to each other produces a basic glider.
+Starting with Pauli X and Z gates next to each other, the glider CQCA moves the two gates one cell to the right with each time step.
 
 
 ```python
@@ -111,8 +165,31 @@ for cells, _ in res:
     					X	Z
 
 
+Analogously, it can also move to the left.
+
+
+```python
+lattice = Lattice([PauliZ(), PauliX()], glider)
+
+res = lattice.iterate(5)
+
+for cells, _ in res:
+    print(list_to_str(cells))
+```
+
+    					Z	X
+    				Z	X	
+    			Z	X		
+    		Z	X			
+    	Z	X				
+    Z	X					
+
+
 ## Fractal Behavior
-The following configuration exhibits a fractal behavior.
+There are multiple classes of CQCAs.
+Additionally to the gliders, there are also fractals and periodical CQCAs (TODO).
+
+The following configuration demonstartes fractal behavior.
 
 
 ```python
@@ -121,24 +198,36 @@ fractal = Automaton([[[-1, 0, 1], [0]], [[0], []]])
 
 
 ```python
-lattice = Lattice([PauliX(), PauliY(), PauliZ(), PauliY(), PauliX()], fractal)
+lattice = Lattice([PauliX()], fractal)
 
-res = lattice.iterate(5)
+res = lattice.iterate(10)
 
 for cells, _ in res:
     print(list_to_str(cells))
 ```
 
-    					X	Y	Z	Y	X					
-    				X	Z	Y	X	Y	Z	X				
-    			X	Y	X	Y	Y	Y	X	Y	X			
-    		X	Z	Z	Y	Z	Z	Z	Y	Z	Z	X		
-    	X	Y			Z		X		Z			Y	X	
-    X	Z	Y	X		X	X	Y	X	X		X	Y	Z	X
+    										X										
+    									X	Y	X									
+    								X	Z	Z	Z	X								
+    							X	Y		X		Y	X							
+    						X	Z	Y		Y		Y	Z	X						
+    					X	Y	X	Z		Z		Z	X	Y	X					
+    				X	Z	Z	Z			X			Z	Z	Z	X				
+    			X	Y		X	X		X	Y	X		X	X		Y	X			
+    		X	Z	Y		Z	Z		Z	Z	Z		Z	Z		Y	Z	X		
+    	X	Y	X	Z	X	X	X		X	X	X		X	X	X	Z	X	Y	X	
+    X	Z	Z	Z	X	Z	Y	Z		Z	Y	Z		Z	Y	Z	X	Z	Z	Z	X
 
+
+With enough iterations (more than are feasible with the current visualization code) this CQCA evolves similar to this [Citation TODO]:
+
+![Fractal CQCA](images/fractal.png)
 
 ## Entanglement
-When the initial cells are entangled, their "reach", which may be increasing over time, entangles further cells. TODO
+When the initial cells are entangled, their "reach", which may be increasing over time, entangles further cells.
+Entanglement can also be destroyed, if a cell returns to an identity gate.
+
+TODO
 
 
 ```python
@@ -149,7 +238,7 @@ glider2 = Automaton([[[], [0]], [[0], [-2, 2]]])
 ```python
 alms = [
     (glider, "Glider", "v"),
-    (glider2, "Glider (length 2)", "^"),
+    (glider2, "Glider (stride 2)", "^"),
     (fractal, "Fractal", "x"),
     #(periodical, "Periodical", "s")
 ]
@@ -164,7 +253,7 @@ plot_entanglement(alms, init_config, max_t)
 
 
     
-![png](README_files/README_18_0.png)
+![png](README_files/README_22_0.png)
     
 
 
