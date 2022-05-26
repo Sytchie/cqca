@@ -1,12 +1,17 @@
+**Disclaimer:**
+This notebook heavily relies on the paper [TODO citation].
+However, notations, results and interpretations may differ.
+
 # Clifford Quantum Cellular Automata
+
 A Clifford Quantum Cellular Automaton (CQCA) is a *globally unique* ruleset for mapping Pauli gates to a set of Pauli gates (or identity gates).
 This ruleset is applied, at each time step, to every cell of an infinite lattice of cells.
 Each cell holds a Pauli gate.
 
 The application of a gate to another follows following rules:
-- $i \times i = I, i \in \{I, X, Y, Z\}$ (Unitary operator)
-- $i \times I = I \times i = i, i \in \{I, X, Y, Z\}$ (Identity is neutral)
-- $i \times j = k, i \neq j \neq k \in \{X, Y, Z\}$
+- $ i \times i = I, i \in \{I, X, Y, Z\} $ (Unitary operator)
+- $ i \times I = I \times i = i, i \in \{I, X, Y, Z\} $ (Identity is neutral)
+- $ i \times j = k, i \neq j \neq k \in \{X, Y, Z\} $
 
 Initially, all cells of the lattice are identity gates.
 However, one can change some of the cells before the first iteration to form a starting configuration.
@@ -14,10 +19,6 @@ By then iterating over time steps, the configuration of the lattice changes.
 The patterns in the change are discussed in this notebook.
 
 In this notebook, the lattice is always 1-dimensional (i.e., a spin chain).
-
-**Disclaimer:**
-This notebook heavily relies on the paper [TODO citation].
-However, notations, results and interpretations might differ.
 
 ## Environment Preparation
 Technical necessities for the notebook to work properly.
@@ -34,11 +35,6 @@ Technical necessities for the notebook to work properly.
 from model.automaton import Automaton
 from model.lattice import Lattice, plot_evolution, plot_entanglement
 from model.gate import Identity, PauliX, PauliY, PauliZ
-```
-
-
-```python
-debug = False
 ```
 
 ## Rulesets
@@ -92,8 +88,8 @@ are thus represented by the following matrix:
 
 $
 \begin{pmatrix}
-() & (0) \\
-(0) & (-1, 1)
+\{\} & \{0\} \\
+\{0\} & \{-1, 1\}
 \end{pmatrix}
 $
 
@@ -249,7 +245,11 @@ plot_evolution(periodic, [PauliX()], 5)
     Z X Z
 
 
-## Translation invariant stabilizer state
+## Translation invariant stabilizer states
+
+TODO
+
+## Bipartite cuts
 
 TODO
 
@@ -274,7 +274,7 @@ plot_entanglement(alms, init_config, 20)
 
 
     
-![png](README_files/README_27_0.png)
+![png](README_files/README_28_0.png)
     
 
 
