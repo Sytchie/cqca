@@ -12,9 +12,7 @@ class Cell:
         return str(self.gate)
 
     def entangle(self, target):
-        if target is self:
-            return
-        if target in self.entanglements:
+        if target is self or target in self.entanglements:
             return
 
         self.entanglements += [target]
@@ -31,13 +29,14 @@ class Cell:
 
 
 def create_cells(coeffs, entanglement_targets=[]):
-    cells = []
-    def operation(a, b): return entangle_multiple(
+    def op(a, b): return entangle_multiple(
         a, b) if entanglement_targets else None
+
+    cells = []
 
     for coeff in coeffs:
         new_cell = Cell(Identity(coeff))
-        operation(new_cell, cells + entanglement_targets)
+        op(new_cell, cells + entanglement_targets)
         cells.append(new_cell)
 
     return cells

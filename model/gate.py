@@ -14,8 +14,7 @@ class Gate(ABC):
 
     @abstractmethod
     def __str__(self):
-        # return str(self.coeff)
-        return ""
+        pass
 
     @abstractmethod
     def combine(self, gate):
@@ -24,17 +23,12 @@ class Gate(ABC):
 
 class Identity(Gate):
     def __call__(self):
-        super().__call__()
-
-        return np.array([[1, 0], [0, 1]])
+        return self.coeff * self.np.array([[1, 0], [0, 1]])
 
     def __str__(self):
-        # return super().__str__() + "I"
-        return ""
+        return " "
 
     def combine(self, gate):
-        super().combine(gate)
-
         new_coeff = self.coeff * gate.coeff
 
         if isinstance(gate, Identity):
@@ -51,16 +45,12 @@ class Identity(Gate):
 
 class PauliX(Gate):
     def __call__(self):
-        super().__call__()
-
-        return np.array([[1, 0], [0, 1]])
+        return self.coeff * np.array([[1, 0], [0, 1]])
 
     def __str__(self):
-        return super().__str__() + "X"
+        return "X"
 
     def combine(self, gate):
-        super().combine(gate)
-
         new_coeff = self.coeff * gate.coeff
 
         if isinstance(gate, Identity):
@@ -77,20 +67,16 @@ class PauliX(Gate):
 
 class PauliY(Gate):
     def __call__(self):
-        super().__call__()
-
-        return 1j * np.array([[0, -1], [1, 0]])
+        return self.coeff * np.array([[0, -1j], [1j, 0]])
 
     def __str__(self):
-        return super().__str__() + "Y"
+        return "Y"
 
     def combine(self, gate):
-        super().combine(gate)
-
         new_coeff = self.coeff * gate.coeff
 
         if isinstance(gate, Identity):
-            return PauliY(new_coeff * 1j)
+            return PauliY(new_coeff)
         if isinstance(gate, PauliX):
             return PauliZ(new_coeff)
         if isinstance(gate, PauliY):
@@ -103,16 +89,12 @@ class PauliY(Gate):
 
 class PauliZ(Gate):
     def __call__(self):
-        super().__call__()
-
-        return np.array([[1, 0], [0, -1]])
+        return self.coeff * np.array([[1, 0], [0, -1]])
 
     def __str__(self):
-        return super().__str__() + "Z"
+        return "Z"
 
     def combine(self, gate):
-        super().combine(gate)
-
         new_coeff = self.coeff * gate.coeff
 
         if isinstance(gate, Identity):

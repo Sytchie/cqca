@@ -1,7 +1,6 @@
 #!/usr/local/bin/python3
 
 from copy import deepcopy
-from util import len_min_max
 from model.gate import Identity, PauliX, PauliY, PauliZ, create_gates
 
 
@@ -13,6 +12,25 @@ class Automaton:
         return str(self.matrix)
 
     def get_ruleset(self):
+        def len_min_max(a, b):
+            a_len = len(a)
+            b_len = len(b)
+
+            min_val = 0
+            max_val = 0
+
+            if a_len > 0 and b_len > 0:
+                min_val = min(a[0], b[0])
+                max_val = max(a[-1], b[-1])
+            elif a_len > 0:
+                min_val = a[0]
+                max_val = a[-1]
+            elif b_len > 0:
+                min_val = b[0]
+                max_val = b[-1]
+
+            return a_len, b_len, min_val, max_val
+
         xtox = self.matrix[0][0]
         xtoz = self.matrix[1][0]
         xtox_len, xtoz_len, x_min, x_max = len_min_max(xtox, xtoz)
@@ -45,20 +63,17 @@ class Automaton:
 
         short_rule = None
         long_rule = None
-
         short_origin = None
         long_origin = None
 
         if len(x_rule) <= len(z_rule):
             short_rule = x_rule
             long_rule = z_rule
-
             short_origin = -x_min
             long_origin = -z_min
         else:
             short_rule = z_rule
             long_rule = x_rule
-
             short_origin = -z_min
             long_origin = -x_min
 
