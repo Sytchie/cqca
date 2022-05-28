@@ -1,16 +1,11 @@
 #!/usr/local/bin/python3
 
-import numpy as np
 from abc import ABC, abstractmethod
 
 
 class Gate(ABC):
     def __init__(self, coeff=1):
         self.coeff = coeff
-
-    @abstractmethod
-    def __call__(self):
-        pass
 
     @abstractmethod
     def __str__(self):
@@ -22,9 +17,6 @@ class Gate(ABC):
 
 
 class Identity(Gate):
-    def __call__(self):
-        return self.coeff * self.np.array([[1, 0], [0, 1]])
-
     def __str__(self):
         return " "
 
@@ -44,9 +36,6 @@ class Identity(Gate):
 
 
 class PauliX(Gate):
-    def __call__(self):
-        return self.coeff * np.array([[1, 0], [0, 1]])
-
     def __str__(self):
         return "X"
 
@@ -66,9 +55,6 @@ class PauliX(Gate):
 
 
 class PauliY(Gate):
-    def __call__(self):
-        return self.coeff * np.array([[0, -1j], [1j, 0]])
-
     def __str__(self):
         return "Y"
 
@@ -88,9 +74,6 @@ class PauliY(Gate):
 
 
 class PauliZ(Gate):
-    def __call__(self):
-        return self.coeff * np.array([[1, 0], [0, -1]])
-
     def __str__(self):
         return "Z"
 
