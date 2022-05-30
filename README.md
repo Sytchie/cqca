@@ -19,8 +19,8 @@ However, one can change a finite number of the cells before the first iteration 
 By then iterating over time steps, the configuration of the lattice changes.
 The patterns in the change are discussed in this notebook.
 
-Even though the dimensionality of the lattice does not matter in the context of CQCAs, it is easiest to consider only 1-dimensional lattices, i.e., spin chains.
-Therefore the notebook only uses such spin chains.
+Even though the dimensionality of the lattice is arbitrary, it is easiest to study 1-dimensional lattices, i.e., spin chains.
+Therefore the notebook only considers such spin chains.
 
 ## **Environment Preparation**
 Technical necessities for the notebook to work properly.
@@ -35,8 +35,8 @@ Technical necessities for the notebook to work properly.
 
 ```python
 from model.automaton import Automaton
-from model.lattice import Lattice, plot_evolution, plot_entanglement
-from model.gate import Identity, PauliX, PauliY, PauliZ
+from model.lattice import plot_evolution, plot_entanglement
+from model.gate import PauliX, PauliY, PauliZ
 ```
 
 ## **Rulesets**
@@ -66,7 +66,7 @@ For example, the matrix
 $
 M_G =
 \begin{pmatrix}
-\{\} & \{0\} \\
+\emptyset & \{0\} \\
 \{0\} & \{-1, 1\}
 \end{pmatrix}
 $
@@ -245,7 +245,7 @@ Entanglement is also destroyed, if a cell returns to an identity gate.
 In order to fully understand the entanglement behavior of CQCAs, the concept of translation invariant stabilizer states has to be defined.
 
 A translation invariant stabilizer state $ \omega $ (for 1-dimensional lattices) is a chain of quantum states (qubits), which, after the application of a set of Clifford operator chains, again results in the same state.
-In the context of CQCAs, the set of Clifford operator chains are the so called generators $ \mathbb{S} =\{(\cdots I_{i-1} Z_i I_{i+1} \cdots), \forall i \in \mathbb{Z}\} $.
+In the context of CQCAs, the set of Clifford operator chains are the so called generators $ \mathbb{S} $, for example $ \mathbb{S} =\{(\cdots I_{i-1} Z_i I_{i+1} \cdots), \forall i \in \mathbb{Z}\} $.
 
 The most important aspects are:
 1. For *every* such set of generators there exists a stabilizer state
@@ -277,8 +277,8 @@ The following shows the evolution of $ E(t) $ over time for the different kinds 
 
 ```python
 alms = [
-    (glider, "Glider", "v"),
     (fractal, "Fractal", "x"),
+    (glider, "Glider", "v"),
     (periodic, "Periodic", "s")
 ]
 init_config = [PauliY(), PauliX(), PauliY()]
