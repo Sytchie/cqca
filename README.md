@@ -9,10 +9,10 @@ This globally unique ruleset is applied, at each time step, to every cell of an 
 Each cell holds either one of the Pauli gates or an identity gate.
 The gates in this context are also referred to as Clifford operators.
 
-The application of an operator to another follows following rules:
-- $ i \times i = I, i \in \{I, X, Y, Z\} $ (Gates are unitary)
-- $ i \times I = I \times i = i, i \in \{I, X, Y, Z\} $ (Identity is neutral)
-- $ i \times j = k, i \neq j \neq k \in \{X, Y, Z\} $
+The application $ \odot $ of an operator to another follows following rules:
+- $ i \odot i = I, i \in \{I, X, Y, Z\} $ (Gates are unitary)
+- $ i \odot I = I \odot i = i, i \in \{I, X, Y, Z\} $ (Identity is neutral)
+- $ i \odot j = k, i \neq j \neq k \in \{X, Y, Z\} $
 
 Initially, all cells of the lattice hold identity gates.
 However, one can change a finite number of the cells before the first iteration to form a starting configuration.
@@ -60,7 +60,7 @@ m_{X \rightarrow Z} & m_{Z \rightarrow Z}
 \end{pmatrix}
 $
 
-The mapping from a Y gate results from applying both an X and a Z gate (it also introduces a $1i$ coeffiecient, but it is of no importance here).
+The mapping from a Y gate results from applying both an X and a Z gate: $ Y = X \odot Z $.
 
 For example, the matrix
 $
@@ -72,11 +72,9 @@ M_G =
 $
 represents the following ruleset:
 
-$
-X \rightarrow \underline{Z} \\
-Y \rightarrow Z \underline{Y} Z \\
-Z \rightarrow Z \underline{X} Z
-$
+- $ X \rightarrow \underline{Z} $
+- $ Z \rightarrow Z \underline{X} Z $
+- Implicit rule: $ Y \rightarrow Z \underline{Y} Z $
 
 This matrix represents the so called glider CQCA, the behavior of which is studied next.
 
@@ -249,27 +247,27 @@ In the context of CQCAs, the set of Clifford operator chains are the so called g
 
 The most important aspects are:
 1. For *every* such set of generators there exists a stabilizer state
-2. The application of a CQCA results in a different set of operator chains, which, in turn have their own stabilizer state
+2. The application of a CQCA results in a different set of operator chains with their own stabilizer state
 
 ### **Bipartite cuts**
 
 Entanglement is measured with respect to bipartite cuts of stabilizer states.
-The entanglement $ E(t) $ is the number of entangled qubit pairs relative to any bipartite cut, at time $ t $.
+The entanglement $ E(t) $ is the highest number of entangled qubit pairs relative to any bipartite cut in $ \mathbb{S} $ at time $ t $.
 
-Albeit all generators of the infinite set $ \mathbb{S} $ are considered at once, the problem can be reduced to a finite amount of computation steps.
+Even though all generators of the infinite set $ \mathbb{S} $ are considered at once, the problem can be reduced to a finite amount of computation steps.
 
 ### **Entanglement measurement**
 
 The key to the solution to this seemingly infinite problem is the fact, that at any time, only a finite amount of cells are non-identity operators.
-This implies that only a finite amount of cells can be entangled.
+This implies, that only a finite amount of cells can be entangled.
 Therefore, one can iterate over all non-identity cells, and measure the number of cells entangled with them, and to which side of the cut they belong.
 This yields $ E(t) $.
 
 But how to determine, to which side of the cut an entangled cell belongs?
 This is solved directly by the definition of $ \mathbb{S} $:
 An arbitrary cut in $ \mathbb{S} $ already produces all possible cuts for a chain of cells.
-Therefore it is sufficient to take the cell $ c_{max} $ with the most number of entanglements $ n_{max} $ an add $ 1 $ to it.
-This yields the chain with the most entanglements.
+Therefore it is sufficient to take the cell $ c_{max} $ with the highest number of entanglements $ n_{max} $ an add $ 1 $ to it.
+This yields the length of the chain with the most entanglements.
 The maximum number of entangled qubit pairs is then simply $ E(t) = \lfloor \frac{1}{2} (n_{max} + 1) \rfloor $.
 
 The following shows the evolution of $ E(t) $ over time for the different kinds of CQCAs for the initial configuration $ (\cdots I Y X Y I \cdots) $:
