@@ -8,7 +8,7 @@ from model.lattice import Lattice
 def plot_evolution(automaton, init_config, max_t, debug=False):
     def list_to_str(l):
         return " ".join([str(e) for e in l])
-    
+
     a = Automaton(automaton)
     lattice = Lattice(init_config, a)
     res = lattice.iterate(max_t, debug)

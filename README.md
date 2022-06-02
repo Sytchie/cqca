@@ -34,9 +34,8 @@ Technical necessities for the notebook to work properly.
 
 
 ```python
-from model.automaton import Automaton
-from model.lattice import plot_evolution, plot_entanglement
-from model.gate import PauliX, PauliY, PauliZ
+from plotter import plot_entanglement, plot_evolution
+from model.gate import PauliX, PauliY, PauliZ, Identity
 ```
 
 ## **Rulesets**
@@ -89,7 +88,7 @@ There are multiple classes of CQCAs:
 
 
 ```python
-glider = Automaton([[[], [0]], [[0], [-1, 1]]])
+glider = [[[], [0]], [[0], [-1, 1]]]
 ```
 
 #### **Evolution of a Pauli Z Gate**
@@ -167,7 +166,7 @@ The following configuration demonstartes fractal behavior.
 
 
 ```python
-fractal = Automaton([[[-1, 0, 1], [0]], [[0], []]])
+fractal = [[[-1, 0, 1], [0]], [[0], []]]
 ```
 
 
@@ -214,7 +213,7 @@ This means that after a certain step, the configuration returns to itself after 
 
 
 ```python
-periodic = Automaton([[[0], []], [[-1, 1], [0]]])
+periodic = [[[0], []], [[-1, 1], [0]]]
 ```
 
 
