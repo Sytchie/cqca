@@ -1,6 +1,6 @@
 **Disclaimer:**
 This notebook heavily relies on the paper [[1](#Sources)].
-However, notations, results and interpretations may differ.
+However, notations, results, and interpretations may differ.
 
 # **Clifford Quantum Cellular Automata**
 
@@ -75,7 +75,7 @@ represents the following ruleset:
 - $ Z \rightarrow Z \underline{X} Z $
 - Implicit rule: $ Y \rightarrow Z \underline{Y} Z $
 
-This matrix represents the so called glider CQCA, the behavior of which is studied next.
+This matrix represents the so-called glider CQCA, the behavior of which is studied next.
 
 ## **Classes of CQCAs**
 
@@ -94,7 +94,7 @@ glider = [[[], [0]], [[0], [-1, 1]]]
 #### **Evolution of a Pauli Z Gate**
 A cell containing a Z gate will contain an X gate in the next time step, and also apply a Z gate to the surrounding cells.
 
-**Note:** Identity gates are not drawn explicitely.
+**Note:** Identity gates are not drawn explicitly.
 
 
 ```python
@@ -127,8 +127,8 @@ plot_evolution(glider, [PauliX()], 5)
     Z X Z X Z X Z X Z
 
 
-Since quantum gates, especially Pauli gates, are unitary, they are able to cancel each other out into identity gates.
-With the right configuration, the "active" gates (i.e., those, which are not the identity gates) propagate to a certain direction, leaving behind only "inactive" identity gates.
+Since quantum gates, especially Pauli gates, are unitary, they can cancel each other out into identity gates.
+With the right configuration, the "active" gates (i.e., those, which are not the identity gates) propagate in a certain direction, leaving behind only "inactive" identity gates.
 
 Starting with Pauli X and Z gates next to each other, the CQCA propagates the two gates one cell to the right with each time step, hence the name "glider".
 
@@ -202,7 +202,7 @@ plot_evolution(fractal, [PauliX()], 25)
     X Y X Z X X X   X X X   X X X Z                 X Y X                 Z X X X   X X X   X X X Z X Y X
 
 
-With enough iterations (more than are feasible with the current visualization code) this CQCA evolves similar to the following figure (taken from [[1](#Sources)]):
+With enough iterations (more than are feasible with the current visualization code) this CQCA evolves similarly to the following figure (taken from [[1](#Sources)]):
 
 ![Fractal CQCA](images/fractal.png)
 
@@ -235,17 +235,17 @@ CQCAs are primarily designed with quantum systems in mind.
 Therefore it is of great interest to look at one of the most important aspects of quantum systems: Quantum entanglement.
 
 When the non-identity cells of the initial configuration are entangled, their "reach", which may be increasing over time, entangles further cells.
-Entanglement is also destroyed, if a cell returns to an identity gate.
+Entanglement is also destroyed if a cell returns to an identity gate.
 
-### **Translation invariant stabilizer states**
+### **Translation-invariant stabilizer states**
 
-In order to fully understand the entanglement behavior of CQCAs, the concept of translation invariant stabilizer states has to be defined.
+To fully understand the entanglement behavior of CQCAs, the concept of translation-invariant stabilizer states has to be defined.
 
-A translation invariant stabilizer state $ \omega $ (for 1-dimensional lattices) is a chain of quantum states (qubits), which, after the application of a set of Clifford operator chains, again results in the same state.
-In the context of CQCAs, the set of Clifford operator chains are the so called generators $ \mathbb{S} $, for example $ \mathbb{S} =\{(\cdots I_{i-1} Z_i I_{i+1} \cdots), \forall i \in \mathbb{Z}\} $.
+A translation-invariant stabilizer state $ \omega $ (for 1-dimensional lattices) is a chain of quantum states (qubits), which, after the application of a set of Clifford operator chains, again results in the same state.
+In the context of CQCAs, the set of Clifford operator chains are the so-called generators $ \mathbb{S} $, for example $ \mathbb{S} =\{(\cdots I_{i-1} Z_i I_{i+1} \cdots), \forall i \in \mathbb{Z}\} $.
 
 The most important aspects are:
-1. For *every* such set of generators there exists a stabilizer state
+1. For *every* such set of generators, there exists a stabilizer state
 2. The application of a CQCA results in a different set of operator chains with their own stabilizer state
 
 ### **Bipartite cuts**
@@ -265,7 +265,7 @@ This yields $ E(t) $.
 But how to determine, to which side of the cut an entangled cell belongs?
 This is solved directly by the definition of $ \mathbb{S} $:
 An arbitrary cut in $ \mathbb{S} $ already produces all possible cuts for a chain of cells.
-Therefore it is sufficient to take the cell $ c_{max} $ with the highest number of entanglements $ n_{max} $ an add $ 1 $ to it.
+Therefore it is sufficient to take the cell $ c_{max} $ with the highest number of entanglements $ n_{max} $ and add $ 1 $ to it.
 This yields the length of the chain with the most entanglements.
 The maximum number of entangled qubit pairs is then simply $ E(t) = \lfloor \frac{1}{2} (n_{max} + 1) \rfloor $.
 
